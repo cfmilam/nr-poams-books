@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>God's Country — N. V. Pope</title>
+<style>
+:root {
+  --bg: #1a1a2e;
+  --bg-secondary: #16213e;
+  --text: #e0d5c1;
+  --text-secondary: #a89b8c;
+  --accent: #c9a84c;
+  --accent-hover: #d4b85c;
+  --sidebar-bg: #0f0f23;
+  --border: #2a2a4a;
+  --figure-bg: #111128;
+}
+
+[data-theme="light"] {
+  --bg: #f5f0e8;
+  --bg-secondary: #ebe4d8;
+  --text: #2c2c2c;
+  --text-secondary: #5a5a5a;
+  --accent: #8b6914;
+  --accent-hover: #a07a1a;
+  --sidebar-bg: #e8e0d0;
+  --border: #c8bca8;
+  --figure-bg: #ede7db;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: Georgia, 'Times New Roman', serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.8;
+  font-size: 1.1rem;
+  transition: background 0.3s, color 0.3s;
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 0; left: -320px;
+  width: 320px; height: 100vh;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--border);
+  z-index: 1000;
+  transition: left 0.3s ease;
+  overflow-y: auto;
+  padding: 60px 20px 20px;
+}
+.sidebar.open { left: 0; }
+.sidebar h2 {
+  color: var(--accent);
+  font-size: 1.1rem;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+.sidebar a {
+  display: block;
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+}
+.sidebar a:hover, .sidebar a.active {
+  color: var(--accent);
+  background: rgba(201,168,76,0.1);
+}
+.sidebar a.sub {
+  padding-left: 28px;
+  font-size: 0.9rem;
+}
+
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 999;
+}
+.overlay.show { display: block; }
+
+/* Top bar */
+.topbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 50px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 998;
+}
+.hamburger {
+  background: none; border: none;
+  color: var(--text);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 8px;
+  line-height: 1;
+}
+.theme-toggle {
+  background: none; border: none;
+  font-size: 1.3rem;
+  cursor: pointer;
+  padding: 8px;
+}
+.topbar-title {
+  color: var(--accent);
+  font-size: 1rem;
+  font-style: italic;
+}
+
+/* Content */
+.content {
+  max-width: 740px;
+  margin: 0 auto;
+  padding: 70px 24px 80px;
+}
+
+/* Title page */
+.title-page {
+  text-align: center;
+  padding: 60px 0 40px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 40px;
+}
+.title-page h1 {
+  font-size: 2.8rem;
+  color: var(--accent);
+  margin-bottom: 20px;
+  letter-spacing: 3px;
+}
+.title-page .subtitle {
+  font-style: italic;
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  max-width: 500px;
+  margin: 0 auto 24px;
+  line-height: 1.6;
+}
+.title-page .author {
+  font-size: 1.2rem;
+  margin-top: 20px;
+  color: var(--text);
+}
+.title-page .publisher {
+  margin-top: 30px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+section {
+  margin-bottom: 40px;
+}
+section h2 {
+  color: var(--accent);
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+section h3 {
+  color: var(--accent);
+  font-size: 1.2rem;
+  margin: 30px 0 14px;
+}
+p {
+  text-align: left;
+  margin-bottom: 1em;
+}
+blockquote {
+  border-left: 3px solid var(--accent);
+  padding-left: 20px;
+  margin: 20px 0;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.figure-placeholder {
+  background: var(--figure-bg);
+  border: 2px dashed var(--border);
+  border-radius: 8px;
+  padding: 30px 20px;
+  margin: 24px 0;
+  text-align: center;
+}
+.figure-placeholder .fig-label {
+  color: var(--accent);
+  font-weight: bold;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+.figure-placeholder .fig-caption {
+  color: var(--text-secondary);
+  font-style: italic;
+  font-size: 0.95rem;
+}
+
+.copyright {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  text-align: center;
+  line-height: 1.6;
+  margin: 20px 0 40px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid var(--border);
+}
+
+.works-list {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin-bottom: 40px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid var(--border);
+}
+.works-list h3 {
+  color: var(--accent);
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+}
+.works-list p {
+  margin-bottom: 0.6em;
+  font-style: italic;
+}
+
+.footnote {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  border-top: 1px solid var(--border);
+  margin-top: 20px;
+  padding-top: 10px;
+}
+
+@media (max-width: 600px) {
+  .content { padding: 60px 16px 60px; }
+  .title-page h1 { font-size: 2rem; }
+  .sidebar { width: 280px; left: -280px; }
+  body { font-size: 1rem; }
+}
+
+/* === PAGINATION === */
+@media print {
+  @page {
+    size: A4;
+    margin: 2.5cm 2cm;
+    @bottom-center {
+      content: counter(page);
+      font-family: Georgia, serif;
+      font-size: 10pt;
+      color: #666;
+    }
+  }
+  body { font-size: 12pt !important; }
+  #toc, #sidebar, .sidebar, .sidebar-overlay, .topbar, #toolbar,
+  #back-top, #progress, #page-indicator { display: none !important; }
+  main, .container, .content { 
+    padding: 0 !important; margin: 0 !important;
+    max-width: 100% !important;
+  }
+  h2 { page-break-before: always; }
+  h2:first-of-type { page-break-before: avoid; }
+  blockquote, figure, .equation, table { page-break-inside: avoid; }
+  p { orphans: 3; widows: 3; }
+}
+
+/* On-screen page indicator */
+#page-indicator {
+  position: fixed;
+  bottom: 1.2rem;
+  right: 1.2rem;
+  background: var(--bg, #1a1a2e);
+  border: 1px solid var(--border, #333);
+  color: var(--accent, #c9a84c);
+  font-family: Georgia, serif;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 900;
+  pointer-events: none;
+  user-select: none;
+}
+#page-indicator.visible { opacity: 0.6; }
+#page-indicator:hover { opacity: 0.9; }
+
+/* Show original page markers subtly */
+.page-marker {
+  display: block !important;
+  height: 0;
+  margin: 0;
+}
+.page-marker::before {
+  content: 'p. ' attr(data-page);
+  display: block;
+  font-size: 0.7em;
+  color: var(--accent2, #8b6914);
+  text-align: right;
+  margin: 0.8em 0 0.2em;
+  opacity: 0.3;
+}
+@media (max-width: 700px) {
+  .page-marker::before { display: none; }
+  #page-indicator { bottom: 0.5rem; right: 0.5rem; font-size: 0.7rem; }
+}
+/* === END PAGINATION === */
+
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+  <span class="topbar-title">God's Country</span>
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">🌙</button>
+</div>
+
+<div class="overlay" onclick="toggleSidebar()"></div>
+
+<nav class="sidebar">
+  <h2>Contents</h2>
+  <a href="#title">Title Page</a>
+  <a href="#works">Works by the Author</a>
+  <a href="#copyright">Copyright</a>
+  <a href="#introduction">Introduction</a>
+  <a href="#golden-grove">The Hill at Golden Grove</a>
+  <a href="#distance">Distance and Discovery</a>
+  <a href="#family-arrives">The Family Arrives</a>
+  <a href="#family">Family</a>
+  <a href="#father">My Father</a>
+  <a href="#evacuation">Evacuation</a>
+  <a href="#ursula">Finding Ursula</a>
+  <a href="#melvyn">Melvyn Charles</a>
+  <a href="#return-swansea">Return to Swansea</a>
+  <a href="#air-raids">Air Raids</a>
+  <a href="#second-evacuation">Second Evacuation</a>
+  <a href="#brynmill">Brynmill</a>
+  <a href="#wartime-incidents">Wartime Incidents</a>
+  <a href="#oxwich">The Oil Tanker at Oxwich</a>
+  <a href="#raf">The RAF</a>
+  <a href="#mary">Mary</a>
+  <a href="#education">Education and Science</a>
+  <a href="#science-philosophy">Science and Philosophy</a>
+  <a href="#afterword">Afterword</a>
+  <a href="#summary">Summary</a>
+</nav>
+
+<main class="content">
+
+<!-- TITLE PAGE -->
+<div class="title-page" id="title">
+  <h1>GOD'S COUNTRY</h1>
+  <p class="subtitle">A personal account of what it was like to be a schoolboy growing up in Wales during the bombings of World War II, and beyond</p>
+  <p class="author">Neville Vivian (Viv) Pope</p>
+  <p class="publisher">Published by<br>φ PHILOSOPHICAL ENTERPRISES<br>10 West End, Penclawdd<br>Swansea, SA4 3YX</p>
+</div>
+
+<!-- WORKS -->
+<div class="works-list" id="works">
+  <h3>Works by the same author</h3>
+  <p><em>Instantaneous Action at a Distance: Pro and Contra.</em> Eds. Andrei Chubykalo, Viv Pope and Roman Smirnov-Rueda; Nova Science, NY., USA.</p>
+  <p><em>Immediate Distant Action and Correlation in Modern Physics: the Balanced Universe.</em> Eds. N. V. Pope, A. D. Osborne and A. F. T. Winfield; Edwin Mellen Press, USA.</p>
+  <p><em>The Eye of the Beholder: the Role of the Observer in Modern Physics,</em> Viv Pope. Publ. by phi Philosophical Enterprises, Swansea, UK.</p>
+  <p><em>Light-speed, Gravitation and Quantum Instantaneity,</em> A. D. Osborne and N. V. Pope, phi Philosophical Enterprises, Swansea, UK.</p>
+  <p><em>Wondering in the Wilderness,</em> A. M. and N. V. Pope, phi, Swansea, UK.</p>
+  <p style="font-style: normal; margin-top: 12px;">Lectures, conference-papers, <em>etc.</em>, are available on the website: www.poams.uk</p>
+</div>
+
+<!-- COPYRIGHT -->
+<div class="copyright" id="copyright">
+  © N. V. and A. M. Pope<br>
+  'Llys Alaw', 10 West End<br>
+  Penclawdd, Swansea SA4 3YX, UK<br>
+  E-mail: vivpope@btinternet.com<br><br>
+  Personal websites:<br>
+  http://www.poams.org<br>
+  http://vivpope.org<br>
+  http://vivpope.co.uk<br><br>
+  ISBN 978-0-9503790-8-1<br><br>
+  Printed in Wales by<br>
+  Dinefwr Press Ltd.<br>
+  Rawlings Road, Llandybie<br>
+  Carmarthenshire, SA18 3YD
+</div>
+
+<!-- INTRODUCTION -->
+<section id="introduction">
+  <h2>Introduction</h2>
+
+  <p>This is an account of the pure bare, innocent and unbidden experience of a child precipitated into a world divided between good and evil on the grandest scale. This was during the period of World War II. Others tell of such things as rationing, troop movements, with maps, reports and so on. This account is from a standpoint of sheer childish innocence. It is an account of what it was like to be a bare human consciousness with little or no knowledge of, or concern, for what was happening worldwide on a political scale. It is a tale of purely individual experience, of impressions received from real events, with no selection of what was 'relevant' or 'irrelevant' or even interesting to the course of the war. It cannot compete with the dramatic accounts of the terrifying experiences of people on the front line or in 'underground' movements such as those in Nazi occupied France — indeed, how could it, since, in Britain, children of that age were neither faced with those situations nor eligible for the forces.</p>
+
+  <p>However, such as it is, this account, for whatever they may be worth, are the thoughts of a wartime evacuee from the Welsh town of Swansea, which was assailed by the German <em>Luftwaffe</em>. It emphasises the formative influence which these events had on the personal and subsequent social life of this philosophically probing individual.</p>
+</section>
+
+<!-- GOLDEN GROVE -->
+<section id="golden-grove">
+  <h2>The Hill at Golden Grove</h2>
+
+  <p>It was a fine, sunny day. Excitedly, I had wandered up from the farm in the valley, where I was staying as a wartime evacuee. Today was the day my parents and grandparents would be coming to visit me from Swansea, as they did on most weekends. On the way, they would pick up my sister, Ursula (four years my junior) from where she was evacuated near Llandeilo. After chatting with my hosts for a while we would drive off somewhere and have a picnic. Waiting, now, on the highest point of the hill, I could see all around me, the shimmering sunlit landscape, with its cloud shadows marching across the land. No sound but that of the skylarks in the clear blue above and the distant cawing of the crows on the hill opposite. It seemed to me I could see as far as forever. Way off in the distance were fields with their bountiful crops, and farms with leafy lanes leading invitingly towards them.</p>
+
+  <p>I could imagine their barns with atmospheric lofts full of scented hay and animal feed, with dusty sunbeams slanting through them, as in my memories of Aunty Sephora's farm I used to be taken to visit in Carmarthenshire, during my earlier childhood, before the war.</p>
+
+  <p>I sat on the stand where the empty milk-churns stood, having been returned by the lorry from Llandeilo. With my thin bare arms resting cool against their silver surfaces, I dreamed — not the tired dreams of sleep but of profound wakefulness, of deep gut-wriggling excitement at contemplating how big the world was and what would be my future in it. I had always been interested in nature and in organising bits of it to do my bidding, like building dams in streams and diverting the water into places where it might otherwise never go. It had driven wheels for me and done other things that, when I grew up, I might implement on a much larger scale. The wind would work for me — I was fascinated with windmills. I felt sure that some day I would be someone to do things that mattered. Here I was, a small boy, to be sure, but a giant from where I stood right now. I would build a grown-up version of my Hornby railway, meandering through the grassy hills and tree-lined cuttings. I would find out in depth how engines worked,</p>
+
+  <!-- FIGURE: View from the high point on the hill, now mostly obscured by nearly seventy years growth of vegetation. Color landscape photo showing dense green vegetation, a red/rust gate, hills and overcast sky in background. -->
+  <div class="figure-placeholder">
+    <div class="fig-label">📷 Photograph</div>
+    <div class="fig-caption">View from the high point on the hill, now mostly obscured by nearly seventy years growth of vegetation.</div>
+  </div>
+
+  <p>what made things grow, what made it all so scented and beautiful, what it was that held me to the earth's surface wherever I stood, sat or walked. I often lay on my back and throw a ball into the air from that position, marvelling at how it got just so far away, and then came back at me, as if by an elastic band or a magnet.</p>
+
+  <p>Magnets also fascinated me, as did spinning-tops and gyroscopes. One day I would find out what made those things behave in the strange ways they did. Particularly, I would find out how it was that I could see as far as I could. What was it that made that distance what it was; why light was so different from the dark; why it was coloured, why it formed beams and cast shadows. I would find out why I was here, why I was not born a sheep or a worm. With my senses filled to overflowing with all the sights, scents and sounds of that sylvan scene, all these ideas flowed through me like a flood. I was so thrilled by it all that it almost hurt.</p>
+</section>
+
+<!-- DISTANCE -->
+<section id="distance">
+  <h2>Distance and Discovery</h2>
+
+  <p>I had always been enthralled by the phenomenon of distance. Distance intrigued me. And what intrigued me not least was that one had the means to change things at a distance. At home in my grandmother's house, I would lay out the rails of my toy train from one room to another and set my engines and trucks to run on it, knowing that they continued on invisibly, under the coat-stands along the hall, until they reached my sister in the next room. She would turn the train around and it would come back to me with the trucks carrying the farm animals, formed out of lead, that we used to play with — dangerous toys, as regarded now, but of no such concern to anyone at that time. Then, in response to my sister's notes in the trucks — for the market, as those notes had instructed — I would turn the train around and send it back with all sorts of things, including my battered lead soldiers with their many-times decapitated heads stuck back on with matchsticks, not much of a deal, she would undoubtedly have thought.</p>
+
+  <p>What fascinated me most about this was that the train continued dutifully to obey my intention, when it was beyond my reach and out of sight — especially in the tunnels I constructed out of rugs and furniture. The rails were the conduits of my purposes. The same applied to what my grandmother called my 'cords and cottons' that, to her annoyance, I often strung around the house and, on fine days, from my bedroom window down to the back gate. These had pulley-wheels attached to carry my Meccano-constructed air-trolleys and other devices from place to place.</p>
+
+  <p>As I got older, these conduits would become more and more sophisticated, graduating from trains on rails to water in pipes, electric currents along wires and, eventually, radio. This fascinated me most of all, to do things right here which affected things over there. With some friends, I experimented with this principle, studying how radios and aerials worked. From bits of junk procured from scrap yards I built radio sets with which, under starry skies, on a bare hill above Manselton some friend and I would operate the 'cat's whisker' crystal until, in the headphones, we located, by sheer chance, some far-off station and listened to the undulating wash of its voices and music, which came and went like something drifting in and out with some ethereal surf.</p>
+</section>
+
+<!-- FAMILY ARRIVES -->
+<section id="family-arrives">
+  <h2>The Family Arrives</h2>
+
+  <p>All this, however, was to come later. For now, as I waited, I continued to stare in wonder at the bright, softly hissing distance of the world around me, punctuated as it was by the sharply pinpointed and comforting sounds of life nearby. And then, into this ensemble there gradually infiltrated the sound of a vehicle coming up the hill. I couldn't see it at first because it was hidden by the brow. But that sound was as familiar to me as my own heartbeat. I knew that it was our old 'Standard Nine'. I had been with my father when he bought it from Barlow's Garage, in Cockett, Swansea — second-hand, of course, since although well-enough provided, we were not exactly rich. My father, though, was an excellent mechanic. His father-in-law, my Grandfather Jones, had recently retired from his job as the boss of the bar-mill in Cwmfelin steel works, in Swansea. My father, meanwhile, was a telephone lineman in Swansea, in a reserved occupation, keeping the telephone communications going during the air-raids. He and my grandfather Jones always got on very well, my father with his spanners repairing the car and my grandfather with his small forge and anvil making any bits and bobs that might be needed for all sorts of things around the house. The biscuit-tin panniers my grandfather had made to fit the running board of an earlier car — a splendid Citroen, which had to be scrapped because there were no parts for it — would, I knew, be full of delicious sandwiches, with bread cut so thin in the way that only my Grandmother Jones could manage.</p>
+
+  <!-- FIGURE: The gateway to Tŷ Llwyd Farm, 2008. Black and white photo showing a stone gatepost overlooking rolling Welsh countryside with fields and hedgerows. -->
+  <div class="figure-placeholder">
+    <div class="fig-label">📷 Photograph</div>
+    <div class="fig-caption">The gateway to Tŷ Llwyd Farm, 2008.</div>
+  </div>
+
+  <p>And now, here they were, coming into view, my sister waving to me excitedly, anticipating the fun we would have at the farm and on the picnic. Another thing that intrigued me about distance was how familiar people and great solid things like cars and trains could just disappear into it, becoming smaller and smaller, like microbes as they got farther and farther until they were swallowed up, and then reappearing later as they were now.</p>
+
+  <p>Then they were there, right alongside me. There stood the Standard Nine, with the smell of hot engine oil shimmering around the bonnet, and the scent of sunshine on metal bodywork and fabric. Even the tang of the exhaust blended sweetly with the scents of fields and hedgerows that had been my sole companions while I waited. The ensemble of my exhilaration had swelled into an orchestra, and now the orchestra reached a crescendo.</p>
+
+  <p>After driving us down the track to visit my hosts, my father would drive us to somewhere like Paxton's Folly, which was where we often went when they came to see us. The tower overlooked the River Towy that meandered through the valley towards Carmarthen, stretching far</p>
+
+  <!-- FIGURE: The entrance and nameplate to Tŷ Llwyd Farm, 2008. Color photo showing wooden nameplate reading "TŶ LLWYD" with climbing plants, white gravel track winding through green rolling countryside. -->
+  <div class="figure-placeholder">
+    <div class="fig-label">📷 Photograph</div>
+    <div class="fig-caption">The entrance and nameplate to Tŷ Llwyd Farm, 2008.</div>
+  </div>
+
+  <!-- FIGURE: View from the west. Color landscape panorama over a wide valley with patchwork fields, farmhouses, trees and hedgerows. -->
+  <div class="figure-placeholder">
+    <div class="fig-label">📷 Photograph</div>
+    <div class="fig-caption">View from the west.</div>
+  </div>
+
+  <p>away westward of the same valley that was overlooked from where I had stood on the hill. Was it my father or my grandfather who, viewing this setting on an earlier occasion, I had heard breathe to himself: 'This is God's country!'?</p>
+</section>
+
+<!-- FAMILY -->
+<section id="family">
+  <h2>Family</h2>
+
+  <p>My father, Don Pope, was part English, but my mother and both her parents were Welsh, her second name being — almost stereotypically Welsh — Blodwen Jones. And Welsh was the first language of my grandparents. But they didn't encourage my sister and me to speak the language, because it was not fashionable in the industrial town of Swansea, and there was nothing, then, of the movement towards preserving the language that there is now. They believed, caringly enough for us children, that it would disadvantage us educationally in the more or less anglicised town in which they were now settled. My grandfather had moved to Swansea from his home in the small farming village of Llanybri, to find work in the town and my grandmother had come from St Clears. Being both of them Carmarthenshire born and bred, they spoke English very much in the Welsh idiom. The only time they spoke fluent Welsh was when they quarrelled — which, happily, was not often.</p>
+
+  <p>My grandfather, Tom Jones, was a stern-looking, moustachioed man, who could have been cast in a cowboy film just as he was without makeup, as a steely-eyed Western gunslinger. His craggy countenance, though, belied his temperament, which was extremely kindly — as I remember it, at any rate. He was also devoutly religious, he and his wife, Isabella (née Thomas) being ardent chapel-goers. He called her Bella — or, on most occasions, <em>Merch</em> (Woman). They often entertained people from the Gors Mission in the parlour of their house in Cwmdu, where we all lived, they, my father, mother, sister and me — all six of us in an end-of-terrace house, named 'Cilrhedyn', at 28 Megan Street. I well remember those meetings between men in white collars, in the front room filled with pipe and cigar smoke. With its towering dark mahogany polished furniture, it was a holy-of-holies which I entered only fearfully and briefly. From that quarter, the 'fear of God' was instilled into me quite literally.</p>
+</section>
+
+<!-- FATHER -->
+<section id="father">
+  <h2>My Father</h2>
+
+  <p>My father, though, was not of that — or any other — religious persuasion. He was of an entirely free-minded and tolerant, philosophical disposition, a man who could enjoy his own counsel and company as much as that of his many friends. These friends were no doubt much appreciative of his ready wit and sense of humour which, in his responses to situations, 'collapsed' me on many occasions. His way of dealing with detractors was, to me, enviable. I often wished I had inherited his ready, Bernard-Shaw-like wit in dealing with people. It was a wit that I, most regrettably, could never match. I was more naturally inclined towards my mother's way of dealing directly with sniping innuendos and other means of direct and naked aggression. In other words, like my sister and our mother, I was quick tempered and precipitate. (My wife sought long and hard to train me out of this but never entirely succeeded.)</p>
+
+  <p>My father's leisure interests, whenever life allowed him to follow them, lay very much in things scientific and philosophical, being an amateur astronomer — later to become an official of the Swansea Astronomical Society. He was as tall and spare as my mother was dumpy, bosomy and comfy. He was as liberally minded and rational as she was impulsive and emotional. He was also highly volatile, with a towering temper when aroused, and some of the rows they had — mostly over her extreme irrationality in matters related to the allocation of his wages for this or that purpose, or the educational prospects of us children, were memorable to say the least. My mother had all sorts of plans mapped out for me in that direction. I felt that most of all she would like me to have become a <em>pregethwr</em> (preacher). This would not have suited me at all. On one occasion, catching me straining at a chest-expander that my father had bought for me, she asked me — in typically Welsh idiom: 'What are you killing yourself like that for?' 'I'm trying to make myself strong, Mumma,' I replied. 'For Heaven's sake,' she said, crossly, 'do you want to end up with strong old arms like your father!' I dared not tell her what I really thought, which was yes, that was <em>exactly</em> what I wanted.</p>
+
+  <p>Strong and macho was not something my mother admired in men. Gentility was what she much preferred. My father was, basically, all of that, although his father, Jim Pope, was only a self-employed local cobbler, who was nevertheless of that same manly ilk. My father's family were not so Welsh as my maternal grandparents, but they were of a more educated lineage, mostly on the side of his mother, Edith Pope (née Pegler) who had been trained and educated as a teacher.</p>
+
+  <p>There was some talk that my paternal grandfather, Jim Pope, was somehow related, on his mother's side, to Christopher Wren. Edith's father, my great grandfather, Alfred Pegler, who had been a 'compositor' for a printing firm was, I was told, something of a poet and playwright, an intellectual, with all the eccentricity and absent-mindedness that goes with it. As for my father, gentle — indeed, genteel — as he usually was would sometimes, and mostly at my instigation, turn into what seemed to me a tyrannosaurus rex. I think, though, that he had an amazing amount of patience with me, perhaps far more than I deserved. In all, he was a man's man through and through, far from being like the Come-to-Jesus-collared, clean-cut, Bible-thumping clergymen who had courted my mother when she was a girl. Indeed, I often wondered how it was that she could ever have chosen my father above all the many suitors who had surrounded her in that chapel-going fraternity.</p>
+
+  <p>If I have given the impression that my father was a violent tempered man, that is not strictly true. As a youth, his own father, a large and imposing man, had controlled him 'with a strap' as they used to say. Don was a well-renowned swimmer but with no trophies or anything to record it. He had no pretensions of that clubbable sort. I heard from others — including my wife's father who, as a younger boy, knew my father's reputation — of how, in 'The Bounds' (the 'out-of-bounds' reservoir of the Cwmbwrla steelworks, in which there had been many accidental drownings), my father was the only one who had the temerity to dive deep down the underwater remains of a chimney-stack and come out through a narrow hole in the base.</p>
+
+  <p>In a temper, my father would become something of a hylozoist. I well remember an incident when I was playing outside my grandfather's shed in which my father kept his motor-bike and sidecar. I could hear him humming away contentedly as he tinkered with the engine of his motorbike — he had a very deep voice and the humming was more like a subterranean rumble than a tune. Then he tried to kick-start the engine, but it stubbornly refused to run. After a number of attempts there was a pregnant silence. Then my father said — to the motorbike apparently, because there was no-one else present — 'Look, I'm bloody-well warning you . . .' and the rest was lost amidst a simian kind of growling.</p>
+</section>
+
+<!-- EVACUATION -->
+<section id="evacuation">
+  <h2>Evacuation</h2>
+
+  <div class="figure-placeholder" style="border-color: var(--accent); opacity: 0.7;">
+    <div class="fig-label">⚠️ Gap in Source</div>
+    <div class="fig-caption">Pages 14–15 of the original are missing from the available scans. Text resumes mid-narrative.</div>
+  </div>
+
+  <p>Mostly, however, I roamed contentedly on my own. One day, wandering in this way across fields, fences and streams, I came to a road and found myself in a place which looked somewhat familiar. It was where my sister had been dropped from the bus that had delivered us evacuees to our foster homes. I remembered how delightedly the lady had greeted Ursula. What a nice lady, I thought, happy that my sister had found a comfortable billet. 'I only wish,' the lady had proclaimed to the bus driver, 'that I could have had the brother as well!' (Unfortunately, as it would turn out, Ursula's experience of this evacuation would not be nearly so pleasant as mine.)</p>
+
+  <p>I had been the last one to be dropped off that day. It was long after the others had been delivered. This was in a single-decker local bus which, when climbing the steep hills, had a gear-whine like the mournful 'lost chord' of a humming top. By then it was early evening, as I recall, and it seemed to me that the driver was impatient to finish and get home. The hills were now covered by a soaking mist. I was dropped, with my small case, at the top of a hill near a gate, with the bus-driver's instruction to 'follow the track until you get to the farm'.</p>
+
+  <p>It was, however, in the wrong place, some distance, as it turned out, from the farm. The visibility, by now, had shut down to just yards, and I had to trek mostly through long grass, as wet as grass can get without being actually under water. I can't remember being scared, just bewildered and bemused, as if in a dream.</p>
+
+  <p>Somehow, I reached the farm. It had loomed out of the mist like some sort of stone-grey castle. Wondering which was the way into it, eventually I found what I assumed to be the front door. In the state of mind I was then in, I was surprised it didn't have a moat and a drawbridge. I felt extremely small.</p>
+
+  <p>I must have knocked on the door (my recall of what happened after this is no longer coherent, so confused were my emotions at the time). However, that is another story. Getting back to the place I had happened upon whilst wandering around the countryside, the house I was now looking at was the one at which Ursula had been delivered on the day of our evacuation. It stood in its own in grounds which were quite large compared to the gardens of the houses in Swansea. In an orchard I spotted Ursula, playing in the sunshine, as much on her own as I had been. She was delighted to see me, and her shouts brought the lady of</p>
+
+  <!-- FIGURE: The school I went to at Golden Grove. Color photo of a small stone village school building with slate roof, Gothic-style pointed arch windows with leaded glass. Now a community centre. -->
+  <div class="figure-placeholder">
+    <div class="fig-label">📷 Photograph</div>
+    <div class="fig-caption">The school I went to at Golden Grove. At this small village school there were many other evacuees, from England, so there were none of whom I knew from my part of the world. My sister, Ursula, and I were separated. She attended a different school. This photograph was taken in 2008 — the school now being a community centre for the village.</div>
+  </div>
+
+  <p>the house into the garden to see what was going on. I can't remember how — so gauche and inarticulate was I as a lad — but somehow I prevailed on the lady of the house to let Ursula come and wander the countryside with me. I took her back to the farm with me, where she was shown, among other interesting things, the caged ferret — which she insisted on calling a 'newt'. There was also a buck rabbit which, almost at its last gasp, I had rescued from a snare and which I had put in an empty barrel with a whole cabbage, hoping it would recover, which I feared it wouldn't. Ursula was watching as I removed the lid of the barrel. She laughed in delight, not only at the animal's escape as also how startled her big and brave brother was as he staggered backwards at the sudden emergence of a very large and vigorous, well-recovered rabbit which leaped up in the air and literally hit the ground running. It was like old times. Ursula, just four years younger, had always been a tomboy and was, in some ways, more like a younger</p>
+</section>
+
+<!-- URSULA -->
+<section id="ursula">
+  <h2>Finding Ursula</h2>
+
+  <p>brother to me than a sister. For the rest of the day we had a whale of a time, so interested was she in my showing her around the farm with its animals, the cowshed, the dairy, the gorgeously coloured strutting cockerel, the barns, pig-sties, the geese and the rest.</p>
+
+  <p>Eventually, I walked her back to where she was staying. It was by now quite late afternoon and getting cooler. As we approached the house, Ursula got quieter. The place now seemed somewhat ominous, despite the sunshine still around it. Accompanying Ursula, I was invited in and stayed with her there for a short while before I left. The interior seemed dark and dismal. In the corner was an old man, seated in what seemed to be a rocking chair. However, the figure was without movement, and silent as if it were a mummy. The sense of ominousness I had felt previously was now heightened.</p>
+
+  <p>While I was there, Ursula gave vent to some of her natural boisterousness, which did not seem to be well appreciated by her host, and as I took leave of them, I saw her receive a hard smack by the woman for what seemed to me no reason at all. This disturbed me all the way back to the farm. The bad feeling stayed with me so much so that when my family came to visit the next weekend, I told them of the incident. I don't know what transpired at the house where Ursula was staying, but my parents took Ursula away with them, back to Swansea. Although there was no such problem in my case — I had been extremely well treated and cared for on the farm — Ursula's return to Swansea made me homesick and the next time they visited I was taken away, too, with, as I gleaned, the profoundest apologies and gratitude from my parents to my hosts and much sympathy and understanding from them.</p>
+</section>
+
+<!-- MELVYN CHARLES -->
+<section id="melvyn">
+  <h2>Melvyn Charles</h2>
+
+  <p>Prior to that, my wanderings led to my coming across Melvyn (Mel) Charles, the brother of the legendary footballer, John, with both of whom I had been in the same childhood street-gang in Cwmdu and in the same school in Cwmbwrla. I spotted Melvyn kicking a ball against an outhouse wall. Our boisterous greetings caused Melvyn's host, a very nice-seeming comely lady to come out and see what was happening. After I had enjoyed a kickabout with Melvyn, this lady called us in for a cake and a cup of tea. What a nice billet Mel had obtained, I thought. But then, as I was preparing to leave, this nice lady turned to me and staggered me by saying, in Mel's presence, 'I wish I'd been given a nice white lad like you instead of a "blackie" like this one.' The Charles boys' mother, a lovely hardworking, well-respected and kindly woman was I later learned, 'coloured'. This had not in the least concerned my family or any others in the district of Cwmdu. Indeed, one of these 'coloured' gentleman was a well-known local hero who had saved a boy from drowning by diving into the filthy water of the dreaded 'Bounds'. It was only after I and my family moved to England that we became aware of something called a 'colour bar'. In the South Wales seaport town of Swansea, where there were so many different racial strains, so far as I knew no such thing was ever discussed. (It would surely have been to this racist woman's shame to realise that the 'blackie' she was hosting, who was to become a redoubtable football player in his own right, was the brother of the man who would become, arguably, the most gifted sportsman in the history of international football!)</p>
+</section>
+
+<!-- RETURN TO SWANSEA -->
+<section id="return-swansea">
+  <h2>Return to Swansea</h2>
+
+  <p>Anyway, after the incident with Ursula's host, somehow or other — I can't recall the details — I was taken back to Swansea in the train. This was by my mother and father, and Ursula was with us. As we approached Swansea, it got dark, with the stygian darkness of the 'black-out'. The train was stopped, time and again, for long periods. This was due to what we were told were air-raid warnings in the town. The night had a crackling kind of stillness, with the sort of conditioned tension that follows the sound of an air-raid siren. The world seemed to hold its breath. The train moved forward only in spurts. Eventually we reached the station, only to find that there were no buses running from there. We were told we would have to walk up from Victoria Station to Christina Street, in the centre of the town if we wanted to catch a bus to Cwmdu, where we lived.</p>
+
+  <p>When we got to Christina Street, there stood the buses, with their slitted headlights and sidelights. We boarded the one marked 'Cwmbwrla', only to find that it would be going nowhere while the raid was on. So we got out and started to walk the rest of the long way home.</p>
+</section>
+
+<!-- AIR RAIDS -->
+<section id="air-raids">
+  <h2>Air Raids</h2>
+
+  <p>And then, on the way towards Cwmbwrla, the raid opened up and we had to duck into a concrete air-raid shelter — in Tontine Street, I think it was. Inside the shelter, people sat huddled, singing. Then, as the eldritch screams of bombs were followed by the shuddering thumps and thuds of their explosions, interspersed with the ear-slamming bangs of the anti-aircraft batteries and the crackle of flak, it was amazing to me with what suddenness the bawdy singing and capering turned into the most devoutly religious kneeling, chanting and praying.</p>
+
+  <p>In the lulls between the waves of action, my father walked us further towards our destination just outside the town. We had to duck into other shelters on the way, and I was intrigued that the same songs were being desperately bawled out in practically all those different places. And of course, I was frightened, for sure, but mostly I was puzzled. Why were these Germans bombing us? What had we done to them? I failed to understand. It was politics, of course, but that meant little to me at the time.</p>
+
+  <p>What is politics, anyway, I later reflected, but the art of living in an irrational society. In a rational world, what need would there be for politics? This made me an idealist, of course. I had somehow imagined, in my boyhood innocence, that the truth and reality of things could be uncovered by what I later came to identify as logical reason. (Indeed, in later life I was to become a teacher of Logic and Scientific Method.) But from where had I obtained this notion of rationality? I must have imbibed it from my father. I somehow imagined that everyone was as liberal and rational as he was. It was plain to me that without logicality there could be no honesty, no real clarity of thought or even of opinion. People without logic could think whatever they liked and get away with it. Without logic, what else could 'thinking' be but a muddy swirl of impressions and emotions? Victims of their own whims and fancies, illogical people could fool anyone, not least themselves. I felt I would prefer to live in a rational world, even if there was to be no-one else in it but myself — as it had seemed from my height on the hill above Golden Grove. An idealist, yes, but better be an idealist with his feet planted firmly in the air than a materialist with his head buried firmly in the ground.</p>
+
+  <p>There would be other raids, of course, some much worse than the one into which we had been precipitated by the train from Llandeilo. There would be one in particular in which I was just sure I was going to die. A stick of bombs fell right across us at Megan Street, destroying houses in streets to either side. 'Strange,' I mused, resignedly, as the bombs screamed down on us, 'that in the morning I won't be here and others will be left to read about it in the paper! Where will I be then?' I wondered, philosophically, as the air-raid shelter rattled, heaved and shook.</p>
+
+  <p>Those bombs, to say the least, had landed far too close for comfort. My future wife's grandparents, a few streets away, were bombed out that night, and her grandfather had to be rescued after being buried, bent double, under a pile of debris. Her uncle had an incendiary bomb blow up in his face, when he was called to deal with it in the lane behind the house opposite where I lived. From these injuries he soon died. The house just opposite to where my Grandparents Pope lived, in Middle Road, was obliterated, and in Vicarage Lane, just behind our house, two bombs dropped, one of them demolishing a very nice old cottage.</p>
+</section>
+
+<!-- SECOND EVACUATION -->
+<section id="second-evacuation">
+  <h2>Second Evacuation</h2>
+
+  <p>After that, Ursula and I were evacuated once again. This was to another idyllic Carmarthenshire spot near Talley, outside Llandeilo. The house my mother had now rented was what had once been a hostelry, a half-way house — indeed, that was its postal address: 'Half-Way, Talley'. It had a dairy at the back, with a trout-stream channelled through the floor, through the south end of which the sun slanted through the clear water to dapple the bed of the stream with the fish waving in the flow trying to look like weeds.</p>
+
+  <!-- FIGURE: Half Way, Talley, 2008. Color photo of a white two-storey house with slate roof at a road junction, green fields and rolling hills in background. -->
+  <div class="figure-placeholder">
+    <div class="fig-label">📷 Photograph</div>
+    <div class="fig-caption">Half Way, Talley, 2008.</div>
+  </div>
+</section>
+
+<!-- BRYNMILL -->
+<section id="brynmill">
+  <h2>Brynmill</h2>
+
+  <p>When we returned to Swansea, after a lull in the bombing, the raids started again and once more we were caught in the midst of it. This was in a district of Swansea called Brynmill, near Swansea Bay, in another house my parents had rented. In our stay there, there was more bombing and just before we arrived a three-storey house had been destroyed, on the corner opposite. After one raid I found an unexploded incendiary bomb, the fins of which were sticking out from a near-by bowling green. I pulled it up and took it home to polish it and show it proudly to mother and my school friends. 'Very nice', said my mother and gave me some 'Glitto' to make it more shiny. I cherished it for some hours — until my father came home and saw it, but that is another story, to which I shall return later. We were near some special guns on the promenade facing Swansea Bay, and during a raid the bangs they made were so loud as to be viscerally disturbing, especially at night.</p>
+
+  <p>Eventually, we left Brynmill to return to my grandparents' house in Megan Street, Cwmdu, where there were more raids again — the bombers seemed to be following us! Returning from a friend's house one night, I was caught in one of the raids and stood on a wall to watch, in utter fascination, a nearby paper factory in Gors Road, Cwmbwrla, in the valley just across the way, near the railway track, set ablaze by incendiary bombs of the same kind that I had dug up and taken home. The fire was so fierce that even at that distance I felt the heat of it on my face. Then suddenly, once again, I was caught by the scruff and shaken by my father, who had been out looking for me. 'It's alright, Daddy,' I stuttered, 'I had my helmet on!' This was a Woolworth's toy helmet that my friend and I had been playing with at his house. I was testing the helmet by wearing it and inviting him to bang spoons on it, proudly declaring: 'No, that didn't hurt' when it definitely did. When he hit me with a saucepan I lost interest in the test — indeed, in everything else for a short while. Next day my father showed me a slash in his Home Guard helmet that had been made, that very night, by a piece of shrapnel.</p>
+</section>
+
+<!-- WARTIME INCIDENTS -->
+<section id="wartime-incidents">
+  <h2>Wartime Incidents</h2>
+
+  <p>As the war continued, there were other incidents of that kind. One day, my friends and I wandered down Caswell valley and onto the beach via a corridor of barbed wire through a cordoned-off minefield spread with anti-tank mines. We passed within yards of a sapper work-</p>
+
+  <!-- FIGURE: Swansea Bay – view towards Mumbles. Elevated view showing urban buildings, rooftops and industrial structures with bay and coastline in background. -->
+  <div class="figure-placeholder">
+    <div class="fig-label">📷 Photograph</div>
+    <div class="fig-caption">Swansea Bay — view towards Mumbles.</div>
+  </div>
+
+  <p>ing in the enclosure, near enough to trade insults with. We weren't more than a hundred yards further on when there was a bang that left my insides fizzing. The man had been blown to pieces, and bits of him were spread all over Caswell. One of our school friends who was there that day, John Bevan, I think it was, from Stepney Street, found the man's ear attached to a piece of his neck on the top of the concrete bus shelter. Not far off we found him pale and vomiting. We also felt profoundly sick on the way home. Strange to relate, as we recalled in late adulthood, none of us, it seems, even mentioned it to our parents or even discussed it among ourselves.</p>
+
+  <p>On another occasion, from the school playground in Brynmill, during morning playtime we saw an aeroplane (a Mosquito, I think it was), with its engines stuttering and falling from the sky. Like a pack of hounds, we all ran in a beeline through Singleton Park, towards where the plane had crashed in Sketty Green. This was in a chicken run at the side of one of the lodges to the Sketty Estate. We had seen the pilot jump out of the plane when it was almost directly overhead the school, the plane having flown in from over the Swansea Bay heading, I suppose, towards Fairwood airfield, to the north-west of</p>
+
+  <!-- FIGURE: Swansea city. Panoramic photograph from elevated hillside showing urban cityscape with buildings, roads, and hills in background under overcast sky. -->
+  <div class="figure-placeholder">
+    <div class="fig-label">📷 Photograph</div>
+    <div class="fig-caption">Swansea city.</div>
+  </div>
+
+  <p>where we were. We clearly saw the pilot's parachute fail to open properly. (Roman candling, as it was called.) With a few schoolmates, I got to the site where the plane had just missed the stone lions on the pillars flanking the gate to the estate and had ended in smoking bits behind the chicken wire. As we stared at the scene, the police came and cordoned everything off. The pilot was nowhere to be seen. He was found later, I was told, behind a hedge not far away, with his unopened parachute. He was dead of course — split in two, as was luridly described by some older boys who claimed to have found him. (Strangely, there seems to be no historical record of this crash in the account of plane-crashes in Gower during that time.)</p>
+
+  <p>On yet another occasion, whilst still living in Cwmdu, I was walking along Torrington Lane, in Gendros, overlooking Swansea. It was a very clear and sunny day. Just overhead there appeared what I thought was an RAF plane — a Hurricane, I guessed — with strange markings, as it flew quite low above me towards the Docks area. It was so low, indeed, that I waved to the pilot. Then I saw the plane dive towards Swansea Docks and clearly saw three bombs drop and explode on</p>
+
+  <!-- FIGURE: Swansea Docks. Elevated view showing industrial dock buildings, cranes, and vessels with residential buildings in foreground. -->
+  <div class="figure-placeholder">
+    <div class="fig-label">📷 Photograph</div>
+    <div class="fig-caption">Swansea Docks.</div>
+  </div>
+
+  <p>Kilvey Hill, between me and the Docks. My wife, when I related this incident to her long afterwards, calculated from my description of the event that this must have been the same day that her maternal grandfather, working at the docks during that bombing, had been bombed and machine-gunned by a captured British plane. I didn't know it at the time, but those explosions I saw near the top of Kilvey Hill were just three of a stick of bombs aimed at the docks. Nor did I know that while I was watching, on that beautifully sunny day, at that very same moment, people were being killed just over the hill on the Mole of the dock, just below my line of sight.</p>
+
+  <p>There was another incident, about that time, when an unexploded bomb landed in the row of houses in Beatty Street, right next to my friend Ken Morgan's house. Like others in the street, he was evacuated to stay with family elsewhere. A short time afterwards, I was in the lane when the bomb exploded. I clearly saw the end-of-terrace house (Burman's house we called it) lifted, like a huge OXO cube, off its damp-course, standing there square and intact but at an angle to the street, with the curtains and a vase of flowers clearly visible in a window. Then the house crumbled into a heap of rubble right there, as I stood behind the cordon that had been erected in the lane by the police. Then I saw a woman alongside me burst out laughing and a</p>
+
+  <!-- FIGURE: Swansea Docks – sea entrance. Elevated view with church spire, residential rooftops, harbor walls and water. -->
+  <div class="figure-placeholder">
+    <div class="fig-label">📷 Photograph</div>
+    <div class="fig-caption">Swansea Docks — sea entrance.</div>
+  </div>
+
+  <!-- FIGURE: Swansea Docks, south. Elevated view with church spire, industrial buildings, warehouses, tower structure and residential areas. -->
+  <div class="figure-placeholder">
+    <div class="fig-label">📷 Photograph</div>
+    <div class="fig-caption">Swansea Docks, south.</div>
+  </div>
+
+  <p>man slapping her. What on earth was there to laugh at? I wondered. I realised only much later that she must have been hysterical.</p>
+
+  <p>Something else which puzzled me at the time was when, with my friend Ken Morgan's 'Diana' air rifle, I helped to finish off what the Germans had done to his neighbour's house. I was happily engaged in shooting out the windows of the garden shed of the property which, due, no doubt, to the heavy muffling of the explosion with sandbags, had somehow survived intact. (Only later did I reflect on the courage of the men who had done that!) And then I learned that the police were hunting for whoever it was that had committed this heinous deed of shooting-out the shed windows. They never got to me, but it seemed very strange that they were ready to punish me for a bit of target practice with the shed in the garden of a house that had been completely destroyed by the Germans. Why were they after me, I wondered, instead of blaming those Germans who were the ones responsible for far greater damage? It simply wasn't fair!</p>
+
+  <p>Another time, in Caswell, when Ken had somehow procured an RAF rubber dinghy, we got into it and paddled out into the tide which, unfortunately for us, was then on the turn. The drogue which was fitted under the dinghy to anchor it in the currents, carried us out to sea at a speed which made our paddling (with our hands, as I recall) completely ineffectual. So we remained offshore for what seemed for ever until the tide eventually turned and brought us back to shore — sun-scorched, salted like kippers and much the worse for wear.</p>
+</section>
+
+<!-- OXWICH -->
+<section id="oxwich">
+  <h2>The Oil Tanker at Oxwich</h2>
+
+  <p>It was with another long-time friend (Elfed Killa, as it later turned out) that, having cycled to Oxwich Bay, we got off our bikes to stand alongside a torpedoed oil-tanker which had been washed up on the beach. Two men with oxy-acetylene cutting equipment were preparing to cut a hole in the side of the ship to release the oil. One of them was banging up and down the hull with a hammer. 'Why are you doing that?' I asked. 'Well you see, son,' he said, sagely, 'we have to cut below the level of the oil, so that our cutting equipment won't spark off an explosion, which it would if we cut above that level into the vapour.' 'I see,' I said, fascinated by the logical sense of it. Now, from this present time of writing, I can scarcely credit that this happened. Not only would the spillage of the oil be completely unacceptable nowadays for reasons of ecology but also, to have a bunch of small boys standing watching such an operation would now be unthinkable. Practically the whole of the Gower peninsula would have to be evacuated, which makes it difficult for someone of my generation to appreciate the fuss that is nowadays made about so many prissy rules and regulations. As it was, we were told, for safety reasons, to stand back some thirty-or-so yards away from where the cutting took place!</p>
+</section>
+
+<!-- RAF -->
+<section id="raf">
+  <h2>The RAF</h2>
+
+  <div class="figure-placeholder" style="border-color: var(--accent); opacity: 0.7;">
+    <div class="fig-label">⚠️ Gap in Source</div>
+    <div class="fig-caption">Pages 28–29 of the original are missing from the available scans. Text resumes mid-paragraph.</div>
+  </div>
+
+  <p>trying to kill each other for no reason but that we were trying to kill each other. It made no sense. But with the systematic appeal my instructors made to my 'manhood', I dutifully bayoneted, garrotted and shot at the effigies of those they earmarked as my 'enemies', with all the competitive zeal that had been instilled into me. Luckily, however, I never got to putting that training into effect because it seems that my services as an RAF DF (Direction-Finding) operator were required more in Britain than in Korea. I had never fancied killing anyone, anyway. A boxing instructor once said to me: 'Taff, you lack the killer instinct. What,' he asked, 'have you got against punching your opponent in the face?' 'It's because,' I replied, 'that's where the soul lives.' I could never understand how people could shove their fists — far less broken bottles and the like — into other people's faces. Faces were for smiling and communicating with, not damaging or destroying. Wrestling was fine. Incapacitating opponents in a civilized way without causing them permanent injury or harm was okay, and I was passably good at that. But killing and injuring people who were as sensitive, aware and intelligent — as essentially human — as myself . . . That was complete anathema to me.</p>
+
+  <p>So, mixed up as I was, I was left forever wondering how I would have acquitted myself in a real battle situation of the sort for which I had been prepared. In spite of my 'hang-ups' about killing, I had excelled in my training and physical pursuits in general. I was chosen as 'Senior Man' of my group. One day, as I emerged from the ablutions, stripped to the waist, the Corporal in Charge watched me for a while and then said to me: 'Can you look after yourself, Taff?' 'I manage,' I replied, to which he responded: 'Well, then, you're in charge of this soddin' lot!'</p>
+
+  <p>I also excelled in the estimation of the corporals and sergeants, and was eventually selected as the top recruit of my intake, being the one 'talked to' by the AOC (Air Officer Commanding) on Pass-out Parade. I was also chosen as a temporary conscript into the RAF Special Police (the 'SPs') during an outbreak of riots among cadets at Cranwell, and was used as a demonstration model during training for a public gymnastic display. At the camp to which I was sent after training I organised and ran a body-building club. All this was of great satisfaction to my ego and general self-regard. Yet, throughout it all I remained split-minded about it. My alter ego kept nagging me about the vanity and ineffectuality of it all. Something inside nagged at me that none of this really mattered, that it was not the sort of life I had anticipated as a lad in those halcyon days at Golden Grove. What, I wondered, was the ideal end-aim of life to be, a heaven or a Valhalla? On times I would wander away on my own to think about it — to 'sort myself out', as I told myself. At other times, I was an extravert to the point of lunacy, and I was aware that some of my extremest and stupidest exploits had, albeit unintentionally, become legendary.</p>
+</section>
+
+<!-- MARY -->
+<section id="mary">
+  <h2>Mary</h2>
+
+  <p>I had scarcely emerged from boyhood when I met the girl I would marry and who would become everything to me. She would be the mother of my children and the grandmother of theirs in their turn. This relationship put a curb on my natural excesses and encouraged what only she had seen as the best in me. She was the only one my grandmother had liked among the gang of girls with whom my friends and I consorted during our early years of puberty. And my grandmother's intuitions had proved correct, although, sadly, she never lived to see it. Mary and I were complete opposites — different animals in many ways. We were, I felt, the complete Yin and Yang, as the Chinese see it, of the relation of the sexes. She was a natural rule-follower and scholar and, when I met her, was being groomed for an academic career at either Oxford or Cambridge. But her career in that respect had been blighted from the start of her meeting with me, to the chagrin of her parents and teachers who did all they could to break us apart — especially her father, who disliked me intensely. However, from her I eventually imbibed the arts and literary education I had systematically escaped in my wanderings away from school. Not only did she educate me, selflessly and stealthily as only a woman can, but also she educated the whole family and was the last one of us to graduate, which she did in her fifties.</p>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <h2>Education and Science</h2>
+
+  <p>Unlike Mary, I never took to formal Education. Schooling had bored me to near-catatonia. My mind was always elsewhere, away from stuffy old classrooms with their buff-coloured walls, away from books, tests and exams, roaming wraith-like outside in the country. 'Mitching' from school as often as I could, I would wander around the docks and scrap-yards, picking up interesting bits and bobs, taking them home to my workshop (a modified Anderson air-raid shelter) for examination as to possible use, as if each visit had been a plundering of Aladdin's Cave. Also, some of my earliest memories were of messing around with my Meccano set and the interesting things in my Grandfather Jones' shed, not least the huge anvils, vices and hammers he so often used to forge bits of metal. He had shown me how to make 'slaked lime' from limestone beach pebbles, heated in the fire and then dropped into a bucket of water. This he then used for painting walls and, mixed with ashes, turned into black mortar for bricklaying and stone-setting. He also taught me, during our family excursions, how to make whips out of reeds and whistles out of tree-bark; to find streams for the gathering of water-cress. He also showed me, on the estuary at Llansteffan, how to catch flatfish with a three-pronged fork he had forged in his shed. Although I spotted many of them stirring up clouds of sand, I never caught a single fish by this method and, in my excitement, barely missed spiking my own feet with it.</p>
+
+  <p>Sometimes, mostly when ill in bed, recovering from some illness or other, I would pick through the weighty, sweet-scented, beautifully illustrated encyclopaedias that my parents had bought for us. These I would scan through avidly, even if only reading the legends accompanying the pictures, while my grandmother brought me plates of my beloved salt-buttered thin-cut bread. From all this I gained a love of science that never left me. I read about people like Columbus and Copernicus, Galileo and Newton, as well as many others who, each in his day, had so spectacularly changed the course of men's thinking away from channels of witchcraft and superstition into the paths of true rational science. I learned about how these mental giants had had to fight the Establishment, so bravely and often in fear of their very lives, to rescue truth from the stranglehold of sheer stupidity.</p>
+
+  <p>It was with all this love of science and sweet reason already infused into me that I had sat amongst those cool milk-churns on their stand in the heart of 'God's country'. I hadn't even the vaguest notion, at that time, of where this love of science would lead me or the heartache it would eventually involve.</p>
+</section>
+
+<!-- SCIENCE AND PHILOSOPHY -->
+<section id="science-philosophy">
+  <h2>Science and Philosophy</h2>
+
+  <p>My reading taught me that there had been times in our history when, in order to keep science squared with nature, it had been necessary for it to make radical and indeed revolutionary changes against all the resistance convention could muster. It made me wonder, could any such revolution ever happen again? I tried to think how it would have been, when everyone thought the earth was flat to have discovered that it is round. I felt that watching ships disappear over the horizon, I would surely have worked that out for myself, by plain commonsense. But then I imagined reporting this to someone, only to be told, 'That's ridiculous! If the earth were round, then all the oceans would flow around it and fall off underneath!'</p>
+
+  <p>This put me in mind of Copernicus who, when the 'going rate' among the populace at large was to think of the Earth as the God-created centre of the universe, had discovered that the Earth, like all the other planets, circled the sun. I read that he dared not publish this discovery for fear of religious persecution. I remembered also reading about Giordano Bruno who, supporting the Copernican view, taught what everyone now knows, that our earth and all the various planets and satellites have surfaces like our earth and are no more than just rocks, like our own planet, all orbiting the sun. I read that for his trouble, this got Bruno, together with his books, burned at the stake. Then there was Galileo who was threatened with torture for supporting the Copernican view. And when, with his primitive telescope, he projected an image of the sun onto a screen to reveal what we now know as sunspots, he was accused of 'trafficking with the Devil' in devising and employing of instruments suggesting that God had created a 'flawed luminary'. What has absolutely staggered me, only recently, was that in view of how modern cosmology and technology supported him, Galileo was 'forgiven' by the Catholic Church for what they charged him at the time as 'heresy'.</p>
+
+  <p>For a long time, I firmly believed that those days of social stupidity were over, and that science had now reached its final, finished form. I felt satisfied that it was now both theoretically and practically replete, and I pursued my interests in it avidly. But then, as my probings continued, I gradually came to realise that something was seriously amiss. My earlier 'love of science' was now being tested to destruction. I was forcefully reminded of the sorts of things that had happened to those earlier questioners, such as Copernicus, Galileo and the others. How, I wondered, would I have felt then? Much the same as now, I imagined. Those things had definitely happened and now it seemed to me that they were about to happen again.</p>
+
+  <p>What disturbed me was that the science I had so much loved was now, in the name of Modern Physics, starting to part company from logical reason. Moreover, its cosmology was now more absurd than anything I'd read about previously — more absurd even than that of the Hindus, who believed that the world stood on the backs of elephants standing on a huge turtle swimming in an infinite flat sea. Science, it seemed to me, had rescued natural philosophy from the clutches of Religion only to plunge it into a new form of Religion, ruled by a new and incipient kind of priesthood. Priests! I thought. What sorts of creatures were these? I was reminded of what history tells us of the priests who persuaded people to burn their children to propitiate what they imagined to be 'The Gods'. Whatever was the matter with us? We seemed, as a species, to be fundamentally flawed. Whatever was it, I wondered, that made us prone to such complete and utter nonsense.</p>
+
+  <p>The more I thought about these departures of science from commonsense reason, the more ridiculous they became. There were, nowadays as in the past, so many things that people accepted without question as 'scientific' but which even the slightest attention to logic revealed were just plain claptrap. For instance, returning to my earlier thoughts about light and distance with my adult mind, I now posed a series of fundamental questions about the received opinions of the experts on the subject of light. These told me that light travelled invisibly — that is, what else but darkly — as 'waves in a vacuum'. In a <em>vacuum</em>? But what was there to 'wave' in a vacuum? And in a <em>vacuum</em>, what was there against which to measure the speed of anything, constant or otherwise? And what about the way things affected one another at a distance? How did the moon and sun manage to raise the tides on earth? Again I was told that this was due to an inscrutable 'force' acting 'in the vacuum'. In the vacuum, I was told, all bodies wanted to travel in straight lines but were prevented from doing so by those invisible 'forces' by which all bodies magically attract one another across the void. So, I asked myself, when do bodies travel in straight lines in the way we were told? The answer was never, because these invisible 'forces' are always present to hide the straight-line motion we would otherwise observe. But what a con! To me it was pure nonsense to attribute to a 'vacuum' such a holding strength that could not be matched by even the thickest bunches of steel cables!</p>
+
+  <p>The logic of it was like that of the joke about the man who claimed payment for keeping the tigers down in Hyde Park. 'But there are no tigers in Hyde Park,' he was told. 'Which only shows what a good job I'm doing,' he replied.</p>
+
+  <p>As I would advance in my search for natural truth, the more of these self-inflicted cons I would eventually uncover and the more this would enable me to empathise with those others I had read about who had sought, against all the threats of torture and so on, to steer science on an honest, socially disinterested, logical course. There was, it seemed, simply no joined-up logical thinking in modern science. It had lost all philosophical integrity and become completely incoherent, although, like the curate's egg, it was 'good in parts'. And whenever I talked or wrote about this, all I got was sheer negativity. A typical reaction was from a science scholar my brother-in-law, John Edwards, had known at university. John had asked this friend of his to comment on a piece of my work. 'Not me!' his friend wrote to him, 'I don't wish to be listed as one of the names in your brother-in-law's "Famous People I have Been Rude To" book.' This was surely the most deeply revealing statement about the ego of that commentator himself. It was on a par with what some scientist was reported to have said. 'Science is going to the dogs. Galileo is dead, Newton is dead, Einstein is dead, and I'm not feeling too well, myself.'</p>
+
+  <p>In a way, these sorts of reactions to my probings — and there were many of these self-revealing reactions — were reassuring. They suggested to me that, at least, I was doing something significant enough to create a back-pressure of classic proportions. But what surprised and distressed me most was the sheer nastiness that this progress generated among my close friends and associates — and even, strange to relate, members of my family. (My father was no longer around, of course. He had died of heart-disease just days before his fiftieth birthday.) And what seemed most paradoxical was that the people who knew least about orthodox science were often the most vigorous in defending it. They were passively accepting a Science they did not understand, through nothing more than awe of its reputation and authority.</p>
+
+  <p>My father wouldn't live long enough to see the fulfilment of his firm expectations, for instance, about man getting to the moon. Nor</p>
+
+  <div class="figure-placeholder" style="border-color: var(--accent); opacity: 0.7;">
+    <div class="fig-label">⚠️ Gap in Source</div>
+    <div class="fig-caption">Pages 36–41 of the original are missing from the available scans. Text resumes in the Afterword.</div>
+  </div>
+</section>
+
+<!-- AFTERWORD -->
+<section id="afterword">
+  <h2>Afterword</h2>
+
+  <p>My impression of the burning 'paper factory' at Cwmdu must have been prior to evacuation, not afterwards, as I had thought. The history scholar and writer J. R. Alban describes the event in a book that Ken found, called <em>The Three Nights' Blitz</em> (published by the City of Swansea, 1994). This was during an incendiary attack on February 20th, 1941, at 8:41 p.m., three months <em>before</em> our evacuation. The first air-raid on Swansea, Alban records, was in May, 1940, just one year prior to evacuation when, one morning I beheld, with astonishment, a gap in the familiar pattern of houses on Townhill just across the way from Megan Street where we lived. The famous 'Three Nights' Blitz' was from the 19th to the 20th of February, 1941.</p>
+
+  <p>In addition to this anachronism concerning the 'paper factory' (which, as it turned out, was actually a storehouse for huge rolls of paper) my narrative of impressions raises what are, for me, some puzzles. One of these concerns my walking along Torrington Lane, in Gendros, and, as I have related, seeing what I took to be an RAF plane dive towards the docks and drop three bombs on Kilvey Hill. My impressions of this event are still crystal clear in my mind, and the craters remained visible for a long time afterwards (I keep looking for them even today, but they now seem to have been obliterated, either by building work or the recent growths of foliage.) Alban records that this attack took place in 1940, on July 10th, at 10:20 a.m., which fits well enough with my memory of the event. However, as he describes it (Alban, p. 4):</p>
+
+  <blockquote>This was an enigmatic daytime attack on 10 July by an aircraft bearing French military markings. The intruder appeared without warning and, although it was observed from many quarters, it flew over the town without challenge, and at 10.20 a.m. commenced its run in over the King's Dock where it dropped four high-explosive bombs. The result was extensive damage to sheds and warehouses at the Mole end of the dock, with twelve dockers being killed and twenty-six injured. There is no record of this attack among the surviving German sources, and the provenance of the aircraft and the composition of its crew remain a mystery to this day.</blockquote>
+
+  <p>This had to be the event I witnessed, but for me there is a discrepancy, insofar as if four bombs were dropped, as Alban reports, then three of them landed on the hill and missed the docks altogether. Of course, the damage and deaths that Alban describes may have been caused by a fourth bomb landing on the King's Dock on the other side of the hill and beyond my field of vision. A visit to the County Hall, Swansea seems to confirm this. The archivist, Kim Collis, with a ruler, drew a straight line on the map from where I had stood in Torrington Road (or the unpaved Torrington Lane, as it then was) to where the damage and deaths were reported, which was over the shoulder of Kilvey Hill, hence below my line of sight. It seems, then, that the plane dropped a stick of bombs aimed for the King's Dock and that the three I saw explode had been dropped too soon and struck the hill while one of them missed the hill and landed on the dock, causing the damage and loss of life that was reported. Mary's recall of this same event (if that is what it was) was on that same date and time when her grandfather was bombed and machined-gunned, as she said, by the plane as it dived over the docks. She remembers this well, as it was on her eighth birthday. However, I recall no sound of machine-gun fire and there is no mention of that in Alban's book — unless, of course, it was on another occasion when the docks were bombed. One such occasion Alban reports was at five past four in the morning, on January 17th, 1941. Dockers work shifts, so that that may have been the occasion in which Mary's grandfather was involved, although Mary doubts that he ever worked nights.</p>
+
+  <p>Another mystery concerns my recollection of seeing, from the farm — or it might have been Talley — the night sky over Swansea lit up with the flames of the bombing. There were only three raids on Swansea during the time we were evacuated. (None of these appear in Alban's account.) One was after midnight on May 31st, 1941, just a week after we left Swansea. This was reported in the County Archives as 'H.E.s' (High Explosive bombs) at Morriston', which is on high ground to the north of the town (or city, as it is now). Another was on June 28th, 1941, reported as 'H.E.s at Langland,' which lies to the southwest of Swansea, at sea-level (not likely to have been seen from Llandeilo). During this same raid there was an unexploded bomb on Mayhill Gardens (again unlikely to have configured in my sighting).<span class="footnote">* Later, we discovered, however, a report that the flames over Swansea could be seen from Llanelli, which is not far from Llandeilo. They were visible as far away as Ystalyfera.</span> The third raid was on November 28th, when 'two parachute mines' were dropped, at about 9.00 p.m., on the Strand and Port Tennant. The sound of those explosions, enclosed as they were on the low ground between Townhill, Mayhill and Manselton, beggared all description. I recall vividly, when Ken and I went down to see the houses flattened by that tremendous explosion, the marks of two bodies on the wall of a house in Prince of Wales Road above the valley which, we were informed, were those of a couple blown from their beds. This doesn't tally with Alban's account of an air-raid, which may have been the one in my recollection of the raid into which we were precipitated from the train on our return from Llandeilo. It occurs to me that what we took on that latter occasion to be bombs were actually the sounds of the anti-aircraft guns on the Swansea seashore — 'rocket-guns' as I think they were called. What I am certain of is that in no way were these stupefying air-blasts the sound of anti-aircraft guns, as confirmed by the destruction we witnessed in the Cwm (Valley) on the following day.</p>
+
+  <p>Yet another puzzle concerns the plane I clearly saw crash at Sketty Green. My impression was that it was a Mosquito, which, as it seems, was a twin-engined De Havilland plane made of plywood. This latter fits my memory of the crash, but my impression was that the plane was single-engined. What is also puzzling is that in the Internet record of wartime plane-crashes on Gower, there is no mention of this incident, which was witnessed by a large number of schoolchildren, some of whom ran, as I did, to the site of the crash, at the entrance gate to the Sketty Hall estate.</p>
+
+  <p>It transpires that most of my impressions of heavy bombing were of the Three Nights' Blitz, in February 1941. This includes the 'paper factory' recollection. All this, in which we were so heavily involved, was prior to evacuation, except for a blitz on February 16th, 1943, when Brynmill, where we were living at the time (after return from evacuation), is reported as badly hit.</p>
+
+  <p>The 'torpedoed oil-tanker' must have been the one described by a lady I spoke to recently at the Oxwich Bay Hotel. This was Julia Davies — or Tucker as she was then. As a girl native to the area she recalls that in 1945 a tanker crashed on the rocks at Lundy and ended up on the beach at Oxwich. There, she says, it was cut in half. One half was left at Oxwich — where it can still be seen to the right of the beach at low tide; the other half was cemented up and towed away in 1949. Subsequent enquiries, by Ken Morgan, produced a map of the wrecks around the Welsh coast. This revealed that the ship was a Norwegian tanker, the <em>Solar</em>. Ken was discussing this incident with another very old friend of ours, Elfed Killa. When Ken reported to him that I couldn't remember who it was that I was with when standing alongside the tanker while the men were preparing to cut a hole in it, Elfed said, 'It was me.' And then I remembered the many miles Elfed and I used to cycle in those days. What Elfed remembered in particular about the incident was that the men warned us to move back to 'a safe distance', which was about <em>thirty yards</em> away!</p>
+</section>
+
+<!-- SUMMARY -->
+<section id="summary">
+  <h2>Summary</h2>
+
+  <p>What is more real? Is it the chronicled history of events or one's own actual experience of those events as they happened? And what, indeed, is history without those direct experiences? Those events in which I was involved, such as the raids, the evacuation, the sentiments, feelings and fears they evoked, the way they directed this one person's life, what can these matter in an entirely objective, historical account? Nothing? No, perhaps everything, since it is the actions of individuals, forged by their personal experiences that <em>make</em> history. History can be nothing without them.</p>
+
+  <p>I have always been aware of being such an individual. I cannot think, feel or perceive as a crowd. I have no doubt that my life, thought and intention were shaped by my experiences both in the madness of the wartime blitzes and in the comparative peace of my sojourn in 'God's Country', which I might never have experienced but for the war. I am grateful for the circumstance that when I went to school at Talley there were no evacuees there with me for companionship, as there had been at Golden Grove, so no consideration was given to the fact that I didn't speak Welsh, as all the other pupils did. This threw me on my own devices for learning about things, when, unbeknown to anyone, I went walkabout, exploring the beckoning countryside. This set the pattern for my future encounters with formal Education, from secondary school right up to university and beyond, any influence of which I accepted on my own terms, with logical criticality and rational scepticism.</p>
+
+  <p>We are, all of us, children of our times, and I am eternally thankful that, for all the difficulties and dangers of my childhood during the war, my time was then and not now.</p>
+</section>
+
+</main>
+
+<script>
+function toggleSidebar() {
+  document.querySelector('.sidebar').classList.toggle('open');
+  document.querySelector('.overlay').classList.toggle('show');
+}
+
+function toggleTheme() {
+  const body = document.documentElement;
+  const btn = document.querySelector('.theme-toggle');
+  if (body.getAttribute('data-theme') === 'light') {
+    body.removeAttribute('data-theme');
+    btn.textContent = '🌙';
+    localStorage.setItem('theme', 'dark');
+  } else {
+    body.setAttribute('data-theme', 'light');
+    btn.textContent = '☀️';
+    localStorage.setItem('theme', 'light');
+  }
+}
+
+// Restore theme
+if (localStorage.getItem('theme') === 'light') {
+  document.documentElement.setAttribute('data-theme', 'light');
+  document.querySelector('.theme-toggle').textContent = '☀️';
+}
+
+// Close sidebar on link click
+document.querySelectorAll('.sidebar a').forEach(a => {
+  a.addEventListener('click', () => {
+    document.querySelector('.sidebar').classList.remove('open');
+    document.querySelector('.overlay').classList.remove('show');
+  });
+});
+
+// Highlight active section
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+      const link = document.querySelector(`.sidebar a[href="#${entry.target.id}"]`);
+      if (link) link.classList.add('active');
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+
+document.querySelectorAll('section[id], div[id]').forEach(s => observer.observe(s));
+</script>
+
+
+<!-- Page indicator -->
+<div id="page-indicator"></div>
+<script>
+(function() {
+  var ind = document.getElementById('page-indicator');
+  if (!ind) return;
+  
+  // Estimate pages based on A4-equivalent content height (~900px per "page" at screen size)
+  var PAGE_HEIGHT = 900;
+  var scrollTimer;
+  var lastPage = -1;
+  
+  function updatePage() {
+    var scrollTop = window.scrollY || document.documentElement.scrollTop;
+    var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    var totalPages = Math.max(1, Math.ceil(document.documentElement.scrollHeight / PAGE_HEIGHT));
+    var currentPage = Math.min(totalPages, Math.floor(scrollTop / PAGE_HEIGHT) + 1);
+    
+    if (currentPage !== lastPage) {
+      ind.textContent = currentPage + ' / ' + totalPages;
+      lastPage = currentPage;
+    }
+    ind.classList.add('visible');
+    
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(function() {
+      ind.classList.remove('visible');
+    }, 2000);
+  }
+  
+  // Throttled scroll handler
+  var ticking = false;
+  window.addEventListener('scroll', function() {
+    if (!ticking) {
+      requestAnimationFrame(function() {
+        updatePage();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+  
+  // Show briefly on load
+  setTimeout(updatePage, 500);
+})();
+</script>
+
+</body>
+</html>
