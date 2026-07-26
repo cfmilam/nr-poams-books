@@ -5,20 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NR-POAMS Books — Pope & Osborne</title>
 <style>
-:root { --bg: #1a1a2e; --fg: #e0e0e0; --accent: #c9a84c; --border: #333; --meta: #999; }
-[data-theme="light"] { --bg: #f5f0e8; --fg: #2a2a2a; --accent: #8b6914; --border: #ccc; --meta: #666; }
+:root { --bg: #faf8f2; --fg: #2a2a2a; --accent: #8b6914; --border: #ccc; --meta: #666; }
+[data-theme="dark"] { --bg: #1a1a2e; --fg: #e0e0e0; --accent: #c9a84c; --border: #333; --meta: #999; }
 body { font-family: Georgia, serif; background: var(--bg); color: var(--fg); max-width: 700px; margin: 2rem auto; padding: 1rem; line-height: 1.6; transition: background 0.3s, color 0.3s; }
 h1 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; }
 a { color: var(--accent); }
 .book { margin: 1.5rem 0; padding: 1rem; border: 1px solid var(--border); border-radius: 8px; }
 .book h3 { margin: 0 0 0.3rem; }
 .book .meta { font-size: 0.9rem; color: var(--meta); }
-.theme-toggle { position: fixed; top: 1rem; right: 1rem; background: var(--border); border: none; color: var(--fg); font-size: 1.4rem; width: 2.4rem; height: 2.4rem; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.3s; }
+.theme-toggle { position: fixed; top: 1rem; right: 1rem; background: var(--accent); border: none; color: var(--bg); font-size: 1.3rem; width: 40px; height: 40px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.2); transition: background 0.3s; }
 .theme-toggle:hover { opacity: 0.8; }
 </style>
 </head>
 <body>
-<button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
+<button class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">🌙</button>
 <h1>NR-POAMS Books</h1>
 <p>The collected books of N. Vivian Pope, Anthony D. Osborne, and associates.<br>
 Normal Realism — Pope-Osborne Angular Momentum Synthesis (NR-POAMS).</p>
@@ -67,21 +67,10 @@ Normal Realism — Pope-Osborne Angular Momentum Synthesis (NR-POAMS).</p>
 <script>
 function toggleTheme() {
   const html = document.documentElement;
-  const current = html.getAttribute('data-theme');
-  const next = current === 'light' ? 'dark' : 'light';
-  html.setAttribute('data-theme', next);
-  localStorage.setItem('theme', next);
-  document.querySelector('.theme-toggle').textContent = next === 'light' ? '🌙' : '☀️';
+  const dark = html.getAttribute('data-theme') === 'dark';
+  if (dark) html.removeAttribute('data-theme'); else html.setAttribute('data-theme', 'dark');
+  document.querySelector('.theme-toggle').textContent = dark ? '🌙' : '☀️';
 }
-(function() {
-  const saved = localStorage.getItem('theme') || 'dark';
-  if (saved === 'light') {
-    document.documentElement.setAttribute('data-theme', 'light');
-    document.addEventListener('DOMContentLoaded', () => {
-      document.querySelector('.theme-toggle').textContent = '🌙';
-    });
-  }
-})();
 </script>
 </body>
 </html>

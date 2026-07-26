@@ -3,8 +3,8 @@
 <script>window.MathJax={tex:{inlineMath:[['$','$']],displayMath:[['$$','$$']],tags:'ams'},startup:{typeset:true}};</script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
 <style>
-:root{--bg:#1a1a2e;--fg:#d4d4d4;--accent:#c9a84c;--muted:#888;--border:#333;--toc-bg:#16162a;--toc-width:300px;--heading-color:#c9a84c}
-[data-theme="light"]{--bg:#f5f0e8;--fg:#1a1a1a;--accent:#8b6914;--muted:#666;--border:#ccc;--toc-bg:#ebe6db;--heading-color:#8b6914}
+:root{--bg:#faf8f2;--fg:#1a1a1a;--accent:#8b6914;--muted:#666;--border:#ccc;--toc-bg:#f0ead6;--toc-width:300px;--heading-color:#8b6914}
+[data-theme="dark"]{--bg:#1a1a2e;--fg:#d4d4d4;--accent:#c9a84c;--muted:#888;--border:#333;--toc-bg:#16162a;--heading-color:#c9a84c}
 *{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
 body{font-family:Georgia,'Times New Roman',serif;background:var(--bg);color:var(--fg);line-height:1.8;font-size:16px}
 #progress{position:fixed;top:0;left:0;height:3px;background:var(--accent);z-index:1000;width:0;transition:width .1s}
@@ -110,7 +110,7 @@ blockquote{margin:1.5em 0;padding:.5em 1.5em;border-left:3px solid var(--accent)
 
 </style></head><body>
 <div id="progress"></div>
-<div id="toolbar"><button id="toc-toggle">☰</button><span id="book-title">Immediate Distant Action — Pope, Osborne &amp; Winfield (2005)</span><button id="theme-toggle">☀️</button></div>
+<div id="toolbar"><button id="toc-toggle">☰</button><span id="book-title">Immediate Distant Action — Pope, Osborne &amp; Winfield (2005)</span><button id="theme-toggle">🌙</button></div>
 <nav id="toc"><div class="toc-header"><h3>Contents</h3><button id="toc-close">&times;</button></div><ul>
 <li class="toc-chapter"><a href="#front-matter">Front Matter</a></li>
 <li class="toc-section"><a href="#illustrations">List of Illustrations</a></li>
@@ -2971,7 +2971,7 @@ bar=document.getElementById('progress'),top_btn=document.getElementById('back-to
 toggle.onclick=()=>toc.classList.toggle('open');
 close.onclick=()=>toc.classList.remove('open');
 toc.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>toc.classList.remove('open')));
-let dark=true;theme.onclick=()=>{dark=!dark;document.documentElement.setAttribute('data-theme',dark?'':'light');theme.textContent=dark?'☀️':'🌙'};
+let dark=false;theme.onclick=()=>{dark=!dark;if(dark){document.documentElement.setAttribute('data-theme','dark')}else{document.documentElement.removeAttribute('data-theme')}theme.textContent=dark?'☀️':'🌙'};
 window.addEventListener('scroll',()=>{const h=document.documentElement,b=document.body,st=h.scrollTop||b.scrollTop,sh=h.scrollHeight||b.scrollHeight,ch=h.clientHeight;bar.style.width=(st/(sh-ch)*100)+'%';top_btn.classList.toggle('visible',st>500)});
 top_btn.onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
 </script>

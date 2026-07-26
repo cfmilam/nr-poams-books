@@ -15,6 +15,17 @@ window.MathJax = {
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
 <style>
 :root {
+  --bg: #faf8f2;
+  --fg: #2a2a2a;
+  --accent: #8b6914;
+  --accent2: #6b4f10;
+  --surface: #ede5d5;
+  --border: #c0b090;
+  --fn-bg: #e8e0d0;
+  --blockquote-border: #8b6914;
+  --link: #8b6914;
+}
+:root[data-theme="dark"] {
   --bg: #1a1a2e;
   --fg: #d4d4d4;
   --accent: #c9a84c;
@@ -24,17 +35,6 @@ window.MathJax = {
   --fn-bg: #0f0f23;
   --blockquote-border: #c9a84c;
   --link: #c9a84c;
-}
-[data-theme="light"] {
-  --bg: #f5f0e8;
-  --fg: #2a2a2a;
-  --accent: #8b6914;
-  --accent2: #6b4f10;
-  --surface: #ede5d5;
-  --border: #c0b090;
-  --fn-bg: #e8e0d0;
-  --blockquote-border: #8b6914;
-  --link: #8b6914;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
@@ -254,7 +254,7 @@ sup a { color: var(--accent); text-decoration: none; font-size: 0.75rem; }
     border-left: 1.5pt solid #666;
     page-break-inside: avoid;
   }
-  :root, [data-theme="light"], body { 
+  :root, [data-theme="dark"], body { 
     --bg: #fff !important; 
     --fg: #000 !important; 
     --accent: #333 !important;
@@ -412,7 +412,7 @@ sup a { color: var(--accent); text-decoration: none; font-size: 0.75rem; }
 <div class="topbar">
   <button id="menuBtn" aria-label="Toggle table of contents">☰</button>
   <span class="topbar-title">Lines from Einstein - Viv Pope</span>
-  <button id="themeBtn" aria-label="Toggle light/dark theme">🌓</button>
+  <button id="themeBtn" aria-label="Toggle light/dark theme">🌙</button>
 </div>
 
 <!-- Sidebar -->
@@ -4316,16 +4316,10 @@ sidebar.querySelectorAll('a').forEach(a => {
   });
 });
 
-let theme = localStorage.getItem('odyssey-theme') || 'dark';
-if (theme === 'light') document.documentElement.setAttribute('data-theme', 'light');
 themeBtn.addEventListener('click', () => {
-  theme = theme === 'dark' ? 'light' : 'dark';
-  if (theme === 'light') {
-    document.documentElement.setAttribute('data-theme', 'light');
-  } else {
-    document.documentElement.removeAttribute('data-theme');
-  }
-  localStorage.setItem('odyssey-theme', theme);
+  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  if (dark) { document.documentElement.removeAttribute('data-theme'); themeBtn.textContent = '🌙'; }
+  else { document.documentElement.setAttribute('data-theme', 'dark'); themeBtn.textContent = '☀️'; }
 });
 </script>
 
@@ -4378,12 +4372,13 @@ themeBtn.addEventListener('click', () => {
 
 
 <script>
+var _preprintTheme = null;
 window.addEventListener('beforeprint', function() {
-  document.documentElement.setAttribute('data-theme', 'light');
+  _preprintTheme = document.documentElement.getAttribute('data-theme');
+  document.documentElement.removeAttribute('data-theme');
 });
 window.addEventListener('afterprint', function() {
-  var saved = localStorage.getItem('odyssey-theme');
-  if (saved !== 'light') document.documentElement.removeAttribute('data-theme');
+  if (_preprintTheme) document.documentElement.setAttribute('data-theme', _preprintTheme);
 });
 </script>
 

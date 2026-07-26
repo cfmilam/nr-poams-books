@@ -6,6 +6,18 @@
 <title>God's Country — N. V. Pope</title>
 <style>
 :root {
+  --bg: #faf8f2;
+  --bg-secondary: #ebe4d8;
+  --text: #2c2c2c;
+  --text-secondary: #5a5a5a;
+  --accent: #8b6914;
+  --accent-hover: #a07a1a;
+  --sidebar-bg: #e8e0d0;
+  --border: #c8bca8;
+  --figure-bg: #ede7db;
+}
+
+[data-theme="dark"] {
   --bg: #1a1a2e;
   --bg-secondary: #16213e;
   --text: #e0d5c1;
@@ -15,18 +27,6 @@
   --sidebar-bg: #0f0f23;
   --border: #2a2a4a;
   --figure-bg: #111128;
-}
-
-[data-theme="light"] {
-  --bg: #f5f0e8;
-  --bg-secondary: #ebe4d8;
-  --text: #2c2c2c;
-  --text-secondary: #5a5a5a;
-  --accent: #8b6914;
-  --accent-hover: #a07a1a;
-  --sidebar-bg: #e8e0d0;
-  --border: #c8bca8;
-  --figure-bg: #ede7db;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -761,22 +761,16 @@ function toggleSidebar() {
 function toggleTheme() {
   const body = document.documentElement;
   const btn = document.querySelector('.theme-toggle');
-  if (body.getAttribute('data-theme') === 'light') {
+  if (body.getAttribute('data-theme') === 'dark') {
     body.removeAttribute('data-theme');
     btn.textContent = '🌙';
-    localStorage.setItem('theme', 'dark');
   } else {
-    body.setAttribute('data-theme', 'light');
+    body.setAttribute('data-theme', 'dark');
     btn.textContent = '☀️';
-    localStorage.setItem('theme', 'light');
   }
 }
 
-// Restore theme
-if (localStorage.getItem('theme') === 'light') {
-  document.documentElement.setAttribute('data-theme', 'light');
-  document.querySelector('.theme-toggle').textContent = '☀️';
-}
+// Theme: light by default; no persistence
 
 // Close sidebar on link click
 document.querySelectorAll('.sidebar a').forEach(a => {

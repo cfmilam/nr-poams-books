@@ -3,8 +3,8 @@
 <script>window.MathJax={tex:{inlineMath:[['$','$']],displayMath:[['$$','$$']],tags:'ams'},startup:{typeset:true}};</script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
 <style>
-:root{--bg:#faf8f5;--fg:#1a1a1a;--accent:#8b0000;--muted:#666;--border:#ddd;--toc-bg:#f5f3f0;--toc-width:280px}
-[data-theme="dark"]{--bg:#1a1a1a;--fg:#ddd;--accent:#e88;--muted:#999;--border:#333;--toc-bg:#222}
+:root{--bg:#faf8f2;--fg:#2a2a2a;--accent:#8b6914;--muted:#666;--border:#ddd;--toc-bg:#f0ead6;--toc-width:280px}
+[data-theme="dark"]{--bg:#1a1a2e;--fg:#e0e0e0;--accent:#c9a84c;--muted:#999;--border:#333;--toc-bg:#16162a}
 *{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
 body{font-family:'Palatino Linotype',Palatino,Georgia,serif;background:var(--bg);color:var(--fg);line-height:1.75;font-size:17px}
 #progress{position:fixed;top:0;left:0;height:3px;background:var(--accent);z-index:1000;width:0}
@@ -1334,10 +1334,8 @@ Wittgenstein, L. <em>The Philosophical Investigations</em>
 </p></main>
 <button id="back-top">↑</button>
 <script>
-const html=document.documentElement,tb=document.getElementById('theme-toggle'),s=localStorage.getItem('book-theme');
-if(s)html.dataset.theme=s;else if(matchMedia('(prefers-color-scheme:dark)').matches)html.dataset.theme='dark';
-tb.onclick=()=>{const n=html.dataset.theme==='dark'?'light':'dark';html.dataset.theme=n;localStorage.setItem('book-theme',n);tb.textContent=n==='dark'?'☀️':'🌙';};
-if(html.dataset.theme==='dark')tb.textContent='☀️';
+const html=document.documentElement,tb=document.getElementById('theme-toggle');
+tb.onclick=()=>{const dark=html.dataset.theme==='dark';if(dark){delete html.dataset.theme;tb.textContent='🌙';}else{html.dataset.theme='dark';tb.textContent='☀️';}};
 const tc=document.getElementById('toc');
 document.getElementById('toc-toggle').onclick=()=>tc.classList.toggle('open');
 document.getElementById('toc-close').onclick=()=>tc.classList.remove('open');
